@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Ký và Đăng Nhập</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Đăng Ký</h2>
+        <div id="registration-message" style="color: green;"></div>
+        <form id="registration-form">
+            <label for="reg-username">Tên đăng nhập:</label>
+            <input type="text" id="reg-username" name="username" required>
+            
+            <label for="reg-password">Mật khẩu:</label>
+            <input type="password" id="reg-password" name="password" required>
+            
+            <button type="submit">Đăng Ký</button>
+        </form>
+
+        <h2>Đăng Nhập</h2>
+        <div id="login-message" style="color: green;"></div>
+        <form id="login-form">
+            <label for="login-username">Tên đăng nhập:</label>
+            <input type="text" id="login-username" name="username" required>
+            
+            <label for="login-password">Mật khẩu:</label>
+            <input type="password" id="login-password" name="password" required>
+            
+            <button type="submit">Đăng Nhập</button>
+        </form>
+    </div>
+
+    <script>
+        // Đăng ký
+        document.getElementById("registration-form").onsubmit = function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+
+            fetch('/register', {
+                method: 'POST',
+                body: JSON.stringify({
+                    username: formData.get('username'),
+                    password: formData.get('password')
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("registration-message").innerText = data;
+            })
+            .catch(error => {
+                document.getElementById("registration-message").innerText = "Đã xảy ra lỗi: " + error;
+            });
+        };
+
+        // Đăng nhập
+        document.getElementById("login-form").onsubmit = function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+
+            fetch('/login', {
+                method: 'POST',
+                body: JSON.stringify({
+                    username: formData.get('username'),
+                    password: formData.get('password')
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("login-message").innerText = data;
+            })
+            .catch(error => {
+                document.getElementById("login-message").innerText = "Đã xảy ra lỗi: " + error;
+            });
+        };
+    </script>
+</body>
+</html>
